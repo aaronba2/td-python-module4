@@ -1,12 +1,11 @@
-import sqlite3
 import pandas as pd
-
-connexion = sqlite3.connect("controle.db")
 
 df = pd.read_csv("positions.csv")
 
-df.to_sql("positions", connexion, if_exists="replace", index=False)
+positions_risquees = df[df["PnL"] < 0]
 
-print("Données enregistrées dans SQLite")
-
-connexion.close()
+if len(positions_risquees) > 0:
+    print("ALERTE RISQUE")
+    print(positions_risquees)
+else:
+    print("Aucune position risquée")
