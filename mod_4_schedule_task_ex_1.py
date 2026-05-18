@@ -1,10 +1,10 @@
 import schedule
 import time
 
-def verification():
-    print("Vérification automatique du portefeuille...")
+def controle():
+    print("Contrôle portefeuille exécuté")
 
-schedule.every(10).seconds.do(verification)
+schedule.every(5).seconds.do(controle)
 
 while True:
     schedule.run_pending()
