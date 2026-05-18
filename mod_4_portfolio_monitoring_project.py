@@ -3,17 +3,28 @@ import sqlite3
 import schedule
 import time
 
+
+# Fonction de vérification du risque
+def verifier_risque(pnl):
+
+    if pnl < 0:
+        return "Élevé"
+
+    return "Faible"
+
+
+# Fonction principale de monitoring
 def monitoring_portefeuille():
 
-    print("=== MONITORING PORTEFEUILLE ===")
+    print("\n=== MONITORING PORTEFEUILLE ===")
 
-    # Chargement des données
+    # Chargement des données CSV
     df = pd.read_csv("positions.csv")
 
-    # Nombre de positions
+    # Nombre total de positions
     nombre_positions = len(df)
 
-    # PnL total
+    # Calcul du PnL total
     pnl_total = df["PnL"].sum()
 
     print("\nNombre positions :", nombre_positions)
@@ -46,9 +57,7 @@ def monitoring_portefeuille():
     print(meilleur)
 
     # Ajout colonne risque
-    df["Risque"] = df["PnL"].apply(
-        lambda x: "Élevé" if x < 0 else "Faible"
-    )
+    df["Risque"] = df["PnL"].apply(verifier_risque)
 
     print("\n=== DONNÉES AVEC RISQUE ===")
 
@@ -72,7 +81,8 @@ def monitoring_portefeuille():
 # Planification automatique toutes les 10 secondes
 schedule.every(10).seconds.do(monitoring_portefeuille)
 
-print("Contrôle portefeuille lancé...\n")
+print("Contrôle portefeuille lancé...")
+
 
 # Boucle automatique
 while True:
