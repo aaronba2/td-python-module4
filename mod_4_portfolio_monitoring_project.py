@@ -54,7 +54,8 @@ def monitoring_portefeuille():
 
     print("\n=== MEILLEURE POSITION ===")
 
-    print(meilleur)
+    print("Produit :", meilleur["Produit"])
+    print("PnL :", meilleur["PnL"])
 
     # Ajout colonne risque
     df["Risque"] = df["PnL"].apply(verifier_risque)
