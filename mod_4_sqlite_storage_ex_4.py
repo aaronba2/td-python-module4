@@ -1,11 +1,28 @@
-import pandas as pd
+import sqlite3
 
-df = pd.read_csv("positions.csv")
+connexion = sqlite3.connect("controle.db")
 
-positions_risquees = df[df["PnL"] < 0]
+curseur = connexion.cursor()
 
-if len(positions_risquees) > 0:
-    print("ALERTE RISQUE")
-    print(positions_risquees)
-else:
-    print("Aucune position risquée")
+curseur.execute("""
+CREATE TABLE IF NOT EXISTS operations (
+    produit TEXT,
+    pnl INTEGER
+)
+""")
+
+curseur.execute("INSERT INTO operations VALUES ('Bitcoin', 250)")
+curseur.execute("INSERT INTO operations VALUES ('Ethereum', -120)")
+
+connexion.commit()
+
+curseur.execute("SELECT * FROM operations")
+
+resultats = curseur.fetchall()
+
+print("=== DONNÉES ENREGISTRÉES ===")
+
+for ligne in resultats:
+    print(ligne)
+
+connexion.close()
